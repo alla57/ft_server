@@ -7,6 +7,10 @@ apt update
 apt install -y nginx
 
 apt-get php-fpm php-mysqli php-xml (le mien)
+(peut etre aussi) php-curl
+
+ln -s /usr/share/phpmyadmin/ /var/www/html/phpmyadmin
+ls -al /var/www/html
 
 apt install -y wget php (php-cgi php-mysqli php-pear) php-mbstring (php-gettext php-common php-phpseclib) php-mysql
 or
