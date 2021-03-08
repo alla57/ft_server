@@ -6,6 +6,8 @@ mysql_secure_installation
 apt update
 apt install -y nginx
 
+apt-get php-fpm php-mysqli php-xml (le mien)
+
 apt install -y wget php (php-cgi php-mysqli php-pear) php-mbstring (php-gettext php-common php-phpseclib) php-mysql
 or
 apt install apache2 php (php-json) php-mbstring (php-zip php-gd php-xml php-curl) php-mysql
