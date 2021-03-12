@@ -6,6 +6,8 @@ mysql_secure_installation
 apt update
 apt install -y nginx
 
+apt-get install openssl
+
 apt-get install -y php-fpm php-mysqli php-xml php-mbstring(le mien)
 (peut etre aussi) php-curl
 
@@ -23,26 +25,43 @@ mkdir /usr/share/phpmyadmin/tmp && chmod 777 /usr/share/phpmyadmin/tmp
 apt-get install -y vim
 
 service mysql start
+
+mysql -u root
+ALTER USER 'root'@'localhost' IDENTIFIED BY '1234';
+
+openssl req -config example-com.conf -new -x509 -sha256 -newkey rsa:2048 -nodes -keyout key.key -days 365 -out cert.cert
+
+vim /etc/nginx/sites-available/default
+
+ssl_certificate /etc/ssl/ssl-bundle.crt;
+ssl_certificate_key /etc/ssl/ssl-tutorials.key;
+
+service mysql restart
 service nginx start
 service php7.3-fpm start
 
-mysql -u root
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'new_password';
+wget -P Downloads https://wordpress.org/latest.tar.gz
+tar xvf Downloads/latest.tag.gz
+mv /wordpress /var/www/html
+chown -R www-data:www-data /var/www/html/wordpress/
+chmod 755 -R /var/www/html/wordpress/
 
-apt-get install open-ssl
-openssl req -config example-com.conf -new -x509 -sha256 -newkey rsa:2048 -nodes -keyout example-com.key.pem -days 365 -out example-com.cert.pem
-
-apt install -y wget php (php-cgi php-mysqli php-pear) php-mbstring (php-gettext php-common php-phpseclib) php-mysql
-or
-apt install apache2 php (php-json) php-mbstring (php-zip php-gd php-xml php-curl) php-mysql
-or
-apt install php-mbstring php-zip php-gd
-
-CREATE USER 'nom_utilisateur_choisi'@'localhost' IDENTIFIED BY 'mot_de_passe_solide';
-GRANT ALL ON *.* TO 'nom_utilisateur_choisi'@'localhost' WITH GRANT OPTION;
+CREATE DATABASE wordpress;
+GRANT ALL PRIVILEGES on wordpress.* TO 'root'@'localhost' IDENTIFIED BY '1234';
 FLUSH PRIVILEGES;
-QUIT;
+EXIT;
 
-apt install gnupg
-apt-get update && apt-get install lsb-release
-apt install mysql-server mysql-client
+# apt install -y wget php (php-cgi php-mysqli php-pear) php-mbstring (php-gettext php-common php-phpseclib) php-mysql
+# or
+# apt install apache2 php (php-json) php-mbstring (php-zip php-gd php-xml php-curl) php-mysql
+# or
+# apt install php-mbstring php-zip php-gd
+
+# CREATE USER 'nom_utilisateur_choisi'@'localhost' IDENTIFIED BY 'mot_de_passe_solide';
+# GRANT ALL ON *.* TO 'nom_utilisateur_choisi'@'localhost' WITH GRANT OPTION;
+# FLUSH PRIVILEGES;
+# QUIT;
+
+# apt install gnupg
+# apt-get update && apt-get install lsb-release
+# apt install mysql-server mysql-client
