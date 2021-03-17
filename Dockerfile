@@ -15,12 +15,11 @@ RUN mv phpMyAdmin-*/ /usr/share/phpmyadmin
 RUN ln -s /usr/share/phpmyadmin/ /var/www/html/phpmyadmin
 RUN mkdir /usr/share/phpmyadmin/tmp && chmod 777 /usr/share/phpmyadmin/tmp
 
-#RUN openssl req -x509 -newkey rsa:4096 -keyout key.key -out cert.cert -days 365
-
 COPY ./srcs/default /etc/nginx/sites-available/
 COPY ./srcs/wordpress_db.sql ./
 COPY ./srcs/start.sh ./
 COPY ./srcs/config.inc.php /usr/share/phpmyadmin
+COPY ./srcs/ssl_config ./
 
 RUN wget -P Downloads https://wordpress.org/latest.tar.gz
 RUN tar xvf Downloads/latest.tar.gz
@@ -30,5 +29,9 @@ RUN chmod 755 -R /var/www/html/wordpress/
 
 RUN rm -rf /Downloads
 
+RUN chmod +x /start.sh
+
 EXPOSE 80
-#EXPOSE 443
+EXPOSE 443
+
+ENTRYPOINT ["/start.sh"]
